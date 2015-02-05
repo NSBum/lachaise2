@@ -3,9 +3,9 @@
 
 #include <inttypes.h>
 
-class ChairAffair_ColorManager {
+class ColorManager {
 public:
-	ChairAffair_ColorManager();
+	ColorManager();
 	bool isMax();
 	void update();
 	void touch(uint8_t component_value);

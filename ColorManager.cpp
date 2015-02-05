@@ -1,16 +1,16 @@
-#include "ChairAffair_ColorManager.h"
+#include "ColorManager.h"
 #include "config.h"
 #include <Arduino.h>
 
-ChairAffair_ColorManager::ChairAffair_ColorManager() {
+ColorManager::ColorManager() {
 
 }
 
-bool ChairAffair_ColorManager::isMax() {
+bool ColorManager::isMax() {
 	return (_current_value == 0xFF );
 }
 
-void ChairAffair_ColorManager::update() {
+void ColorManager::update() {
 	_update_count++;
 	if( _update_count % COLOR_SENSE_INC_RATE == 0 ) {
 		if( _increasing ) {
@@ -25,16 +25,16 @@ void ChairAffair_ColorManager::update() {
 	}
 }
 
-void ChairAffair_ColorManager::touch(uint8_t baseline) {
+void ColorManager::touch(uint8_t baseline) {
 	_baseline_value = baseline;
 	_increasing = true;
 }
 
-void ChairAffair_ColorManager::release() {
+void ColorManager::release() {
 	_increasing = false;
 	_update_count = 0;
 }
 
-uint8_t ChairAffair_ColorManager::value() {
+uint8_t ColorManager::value() {
 	return _current_value;
 }

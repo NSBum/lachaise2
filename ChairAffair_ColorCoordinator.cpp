@@ -1,9 +1,9 @@
 #include "ChairAffair_ColorCoordinator.h"
 
 ChairAffair_ColorCoordinator::ChairAffair_ColorCoordinator() {
-	_red_mgr = ChairAffair_ColorManager();
-	_grn_mgr = ChairAffair_ColorManager();
-	_blu_mgr = ChairAffair_ColorManager();
+	_red_mgr = ColorManager();
+	_grn_mgr = ColorManager();
+	_blu_mgr = ColorManager();
 
 
 }
