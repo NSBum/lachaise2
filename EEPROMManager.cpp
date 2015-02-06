@@ -1,13 +1,13 @@
-#include "ChairAffair_EEPROMManager.h"
+#include "EEPROMManager.h"
 #include <EEPROM.h>
 #include "config.h"
 #include "EEPROMAnything.h"
 
-ChairAffair_EEPROMManager::ChairAffair_EEPROMManager() {
+EEPROMManager::CEEPROMManager() {
 	return;
 }
 
-void ChairAffair_EEPROMManager::begin() {
+void CEEPROMManager::begin() {
 	//	has the EEPROM been initialized?
 	uint8_t flag = EEPROM.read(EEPROM_ADDR_WAS_INIT);
 	if( flag != EEPROM_ADDR_WAS_INIT ) {
@@ -17,7 +17,7 @@ void ChairAffair_EEPROMManager::begin() {
 	}
 }
 
-void ChairAffair_EEPROMManager::writeTouchThreshold(uint8_t sensor, uint16_t threshold) {
+void EEPROMManager::writeTouchThreshold(uint8_t sensor, uint16_t threshold) {
 	uint32_t addr = EEPROM_ADDR_TCH_BASE + 2 * sensor;
 	EEPROM_writeAnything(addr,threshold);
 
@@ -27,7 +27,7 @@ void ChairAffair_EEPROMManager::writeTouchThreshold(uint8_t sensor, uint16_t thr
 	EEPROM_writeAnything(EEPROM_ADDR_TCH_THRSH, flags);
 }
 
-void ChairAffair_EEPROMManager::writeReleaseThreshold(uint8_t sensor, uint16_t threshold) {
+void CEEPROMManager::writeReleaseThreshold(uint8_t sensor, uint16_t threshold) {
 	uint32_t addr = EEPROM_ADDR_REL_BASE + 2 * sensor;
 	EEPROM_writeAnything(addr,threshold);
 
@@ -37,24 +37,24 @@ void ChairAffair_EEPROMManager::writeReleaseThreshold(uint8_t sensor, uint16_t t
 	EEPROM_writeAnything(EEPROM_ADDR_REL_THRSH, flags);
 }
 
-uint16_t ChairAffair_EEPROMManager::readTouchThreshold(uint8_t sensor) {
+uint16_t EEPROMManager::readTouchThreshold(uint8_t sensor) {
 	uint32_t addr = EEPROM_ADDR_TCH_BASE + 2 * sensor;
 	uint16_t val = EEPROM_readAnything(addr, _dummy_int);
 	return val;
 }
 
-uint16_t ChairAffair_EEPROMManager::readReleaseThreshold(uint8_t sensor) {
+uint16_t EEPROMManager::readReleaseThreshold(uint8_t sensor) {
 	uint32_t addr = EEPROM_ADDR_REL_BASE + 2 * sensor;
 	uint16_t val = EEPROM_readAnything(addr, _dummy_int);
 	return val;
 }
 
-uint16_t ChairAffair_EEPROMManager::customTouchThresholdFlags() {
+uint16_t EEPROMManager::customTouchThresholdFlags() {
 	uint16_t val = EEPROM_readAnything(EEPROM_ADDR_TCH_THRSH, _dummy_int);
 	return val;
 }
 
-uint16_t ChairAffair_EEPROMManager::customReleaseThresholdFlags() {
+uint16_t EEPROMManager::customReleaseThresholdFlags() {
 	uint16_t val = EEPROM_readAnything(EEPROM_ADDR_REL_THRSH, _dummy_int);
 	return val;
 }

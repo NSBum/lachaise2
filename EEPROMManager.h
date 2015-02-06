@@ -3,9 +3,9 @@
 
 #include <inttypes.h>
 
-class ChairAffair_EEPROMManager {
+class EEPROMManager {
 public:
-	ChairAffair_EEPROMManager();
+	EEPROMManager();
 	void begin();
 	void writeTouchThreshold(uint8_t sensor, uint16_t threshold);
 	void writeReleaseThreshold(uint8_t sensor, uint16_t threshold);
