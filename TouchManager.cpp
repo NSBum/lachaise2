@@ -1,15 +1,15 @@
-#include "ChairAffair_TouchManager.h"
+#include "TouchManager.h"
 #include <Wire.h>
 #include <Arduino.h>
 
 
-ChairAffair_TouchManager::ChairAffair_TouchManager() {
+TouchManager::ChairAffair_TouchManager() {
 	_sensor_map[MPR_121_RED] = SENSOR_IDX_RED;
 	_sensor_map[MPR_121_GRN] = SENSOR_IDX_GRN;
 	_sensor_map[MPR_121_BLU] = SENSOR_IDX_BLU;
 }
 
-void ChairAffair_TouchManager::begin() {
+void TouchManager::begin() {
 	_active_flags = 0;
 	_active_flags |= (1 << MPR_121_RED);
 	_active_flags |= (1 << MPR_121_GRN);
@@ -47,11 +47,11 @@ void ChairAffair_TouchManager::begin() {
 	}
 }
 
-boolean ChairAffair_TouchManager::sensorOnline() {
+boolean TouchManager::sensorOnline() {
 	return _sensor_interface_online;
 }
 
-void ChairAffair_TouchManager::update() {
+void TouchManager::update() {
 	_currtouched = _sensor_interface.touched();
 	uint32_t current_time = millis();
 
@@ -89,23 +89,23 @@ void ChairAffair_TouchManager::update() {
 	}
 }
 
-void ChairAffair_TouchManager::setTouchThreshold(uint8_t sensor, uint16_t touch, uint16_t release) {
+void TouchManager::setTouchThreshold(uint8_t sensor, uint16_t touch, uint16_t release) {
 	_sensor_interface.writeRegister(MPR121_TOUCHTH_0 + 2*sensor, touch);
     _sensor_interface.writeRegister(MPR121_RELEASETH_0 + 2*sensor, release);
 }
 
-uint16_t ChairAffair_TouchManager::newTouches() {
+uint16_t TouchManager::newTouches() {
 	uint16_t temp_new_tch = _new_touches;
 	_new_touches = 0;	//	reset the new touches after we deliver
 	return temp_new_tch;
 }
 
-uint16_t ChairAffair_TouchManager::newReleases() {
+uint16_t TouchManager::newReleases() {
 	uint16_t temp_new_rel = _new_releases;
 	_new_releases = 0;	//	reset new releases after we deliver
 	return temp_new_rel;
 }
 
-uint16_t ChairAffair_TouchManager::sensorIndexForHardwareIndex(uint16_t mpr121_idx) {
+uint16_t TouchManager::sensorIndexForHardwareIndex(uint16_t mpr121_idx) {
 
 }

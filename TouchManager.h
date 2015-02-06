@@ -26,10 +26,10 @@ typedef struct {
 	SensorState state;
 } tch_sensor_t;
 
-class ChairAffair_TouchManager {
+class TouchManager {
 public:
 	/**		Constructor	*/
-	ChairAffair_TouchManager();
+	TouchManager();
 
 	/**		Update touch status. 
 	 *
