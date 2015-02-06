@@ -49,9 +49,9 @@
 //	----------- PIN ASSIGNMENTS -----------
 #define DEMO_SW_PIN			2
 #define DEMO_MODE_LED_PIN	3
-#define RED_DX_LED_PIN		4
-#define GRN_DX_LED_PIN		5
-#define YLW_DX_LED_PIN		6
+#define DX_1_LED_PIN		4
+#define DX_2_LED_PIN		5
+#define DX_3_LED_PIN		6
 
 //	----------- DEFAULT DX LED CYCLES ----------- 
 #define DEFAULT_DX_LED_ON	150000UL
