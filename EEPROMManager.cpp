@@ -3,11 +3,11 @@
 #include "config.h"
 #include "EEPROMAnything.h"
 
-EEPROMManager::CEEPROMManager() {
+EEPROMManager::EEPROMManager() {
 	return;
 }
 
-void CEEPROMManager::begin() {
+void EEPROMManager::begin() {
 	//	has the EEPROM been initialized?
 	uint8_t flag = EEPROM.read(EEPROM_ADDR_WAS_INIT);
 	if( flag != EEPROM_ADDR_WAS_INIT ) {
@@ -27,7 +27,7 @@ void EEPROMManager::writeTouchThreshold(uint8_t sensor, uint16_t threshold) {
 	EEPROM_writeAnything(EEPROM_ADDR_TCH_THRSH, flags);
 }
 
-void CEEPROMManager::writeReleaseThreshold(uint8_t sensor, uint16_t threshold) {
+void EEPROMManager::writeReleaseThreshold(uint8_t sensor, uint16_t threshold) {
 	uint32_t addr = EEPROM_ADDR_REL_BASE + 2 * sensor;
 	EEPROM_writeAnything(addr,threshold);
 
