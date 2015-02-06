@@ -1,7 +1,7 @@
 #ifndef _CHAIR_AFFAIR_COLOR_COORDINATOR
 #define _CHAIR_AFFAIR_COLOR_COORDINATOR
 
-#include "ChairAffair_ColorManager.h"
+#include "ColorManager.h"
 #include <FastLED.h>
 
 enum {RED, GREEN, BLUE};
@@ -41,9 +41,9 @@ public:
 	void update();
 
 private:
-	ChairAffair_ColorManager _red_mgr;
-	ChairAffair_ColorManager _grn_mgr;
-	ChairAffair_ColorManager _blu_mgr;
+	ColorManager _red_mgr;
+	ColorManager _grn_mgr;
+	ColorManager _blu_mgr;
 	CRGB _baseline_color;
 };
 
