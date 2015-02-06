@@ -4,9 +4,9 @@
 #include <inttypes.h>
 #include <Arduino.h>
 
-class ChairAffair_Heartbeat {
+class Heartbeat {
 public:
-	ChairAffair_Heartbeat(uint8_t led_pin, uint32_t on, uint32_t off);
+	Heartbeat(uint8_t led_pin, uint32_t on, uint32_t off);
 	void update();
 
 
