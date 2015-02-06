@@ -3,7 +3,7 @@
 #include <Arduino.h>
 
 
-TouchManager::ChairAffair_TouchManager() {
+TouchManager::TouchManager() {
 	_sensor_map[MPR_121_RED] = SENSOR_IDX_RED;
 	_sensor_map[MPR_121_GRN] = SENSOR_IDX_GRN;
 	_sensor_map[MPR_121_BLU] = SENSOR_IDX_BLU;
