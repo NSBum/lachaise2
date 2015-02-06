@@ -12,7 +12,7 @@
 #include "ChairAffair_DemoSwitchManager.h"
 #include "TouchManager.h"
 #include "ColorCoordinator.h"
-#include "ChairAffair_SerialDebugger.h"
+#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
 
 #define NOP __asm__ __volatile__ ("nop\n\t")
@@ -35,7 +35,7 @@ Heartbeat heartbeat(LED_BUILTIN,250,2000);
 // ChairAffair_DemoSwitchManager DemoSwitchManager = ChairAffair_DemoSwitchManager(DEMO_SW_PIN);
 // ChairAffair_ColorCoordinator ColorCoordinator = ChairAffair_ColorCoordinator();
 TouchManager TouchManager = TouchManager();
-ChairAffair_SerialDebugger SerialDebugger = ChairAffair_SerialDebugger();
+SerialDebugger SerialDebugger = SerialDebugger();
 uint16_t loop_count = 0;
 
 CRGB leds[NUM_LEDS];
