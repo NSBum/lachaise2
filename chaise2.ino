@@ -5,13 +5,13 @@
 #include <Wire.h>
 #include <EEPROM.h>
 
-#include "ChairAffair_HeartBeatLED.h"
+#include "HeartBeatLED.h"
 #include "ChairAffair_LightBar.h"
 #include "ChairAffair_TouchManager.h"
 #include "ChairAffair_OpStateManager.h"
 #include "ChairAffair_DemoSwitchManager.h"
-#include "ChairAffair_TouchManager.h"
-#include "ChairAffair_ColorCoordinator.h"
+#include "TouchManager.h"
+#include "ColorCoordinator.h"
 #include "ChairAffair_SerialDebugger.h"
 #include "DxLEDTimers.h"
 
@@ -29,12 +29,12 @@
 #define DEBUG_PRINTLN_F(x,f)	NOP
 #endif
 
-ChairAffair_Heartbeat heartbeat(LED_BUILTIN,250,2000);
+Heartbeat heartbeat(LED_BUILTIN,250,2000);
 // ChairAffair_LightBar DemoBar(0,10, NUM_LEDS >> 2,10);
 // ChairAffair_OpStateManager OpStateManager = ChairAffair_OpStateManager();
 // ChairAffair_DemoSwitchManager DemoSwitchManager = ChairAffair_DemoSwitchManager(DEMO_SW_PIN);
 // ChairAffair_ColorCoordinator ColorCoordinator = ChairAffair_ColorCoordinator();
-ChairAffair_TouchManager TouchManager = ChairAffair_TouchManager();
+TouchManager TouchManager = TouchManager();
 ChairAffair_SerialDebugger SerialDebugger = ChairAffair_SerialDebugger();
 uint16_t loop_count = 0;
 
