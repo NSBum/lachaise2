@@ -13,9 +13,9 @@ typedef enum OperationalState {
 	OpStateTuneSensors	//	mode used to fine tune the touch sensors
 } OperationalState;
 
-class ChairAffair_OpStateManager {
+class OpStateManager {
 public:
-	ChairAffair_OpStateManager();
+	OpStateManager();
 	void update();
 	void touched();
 

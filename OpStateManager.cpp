@@ -1,31 +1,31 @@
-#include "ChairAffair_OpStateManager.h"
+#include "OpStateManager.h"
 #include <Arduino.h>
 
-ChairAffair_OpStateManager::ChairAffair_OpStateManager() {
+OpStateManager::OpStateManager() {
 	//	initialize in powering up state
 	_state = OpStatePoweringUp;
 	_last_touch_time = UINT32_MAX;
 }
 
-void ChairAffair_OpStateManager::setState(OperationalState aState) {
+void OpStateManager::setState(OperationalState aState) {
 	_state = aState;
 }
 
-OperationalState ChairAffair_OpStateManager::state() {
+OperationalState OpStateManager::state() {
 	return _state;
 }
 
-void ChairAffair_OpStateManager::touched() {
+void OpStateManager::touched() {
 	//	if we're touched, we're in active mode
 	_state = OpStateActive;
 	_last_touch_time = millis();
 }
 
-void ChairAffair_OpStateManager::setDemoSwitchState(bool switchState) {
+void OpStateManager::setDemoSwitchState(bool switchState) {
 	_demo_switch_state = switchState;
 }
 
-void ChairAffair_OpStateManager::update() {
+void OpStateManager::update() {
 	//	update our current state depending on present state
 	uint32_t current_time = millis();
 	switch(_state) {
