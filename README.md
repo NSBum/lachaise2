@@ -22,3 +22,25 @@ This firmware runs on a MK20DX256VLH7 Cortex-M4 ARM processor on a Teensy 3.1 bo
 ### Functional description ###
 
 The chair can be in one of four operational states: `OpStatePoweringUp`, `OpStateInactive`, `OpStateActive`, and `OpStateDemo`.  A fifth state, `OpStateTuneSensors` is useful during touch debugging.
+
+1. `OpStatePoweringUp`
+
+    When power is applied to the device, it starts up in `OpStatePoweringUp`. This allows time for the sensors to autocalibrate.
+
+2. `OpStateInactive`
+
+    In this state, there is no visible display of lights. If the user touches any sensor while the unit is in this state, the state advances to the `OpStateActive` state.
+
+3. `OpStateActive`
+
+    When the unit is in this mode, the pattern of the LEDs shift according to the way the user touches the sensor bars. While in the state, if the user does not touch any sensor for 30 seconds, the device will revert to a nother mode depending on the DEMO SW position. If the DEMO SW is ON, the device will revert to `OpStateDemo`. If it is OFF, the device will revert to `OpStateInactive`. 
+
+4. `OpStateDemo`
+
+	In this state, the color and pattern of the LEDs shifts to provide a demonstration program. This mode can be selected by a pushbutton switch on the back of the chair. An LED on the switch provides visual feedback to the user.
+
+5. `OpStateTuneSensors`
+
+	This is useful for fine-tuning the touch and release thresholds on the sensors.
+
+
