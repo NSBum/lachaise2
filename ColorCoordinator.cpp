@@ -1,6 +1,6 @@
 #include "ColorCoordinator.h"
 
-ColorCoordinator::olorCoordinator() {
+ColorCoordinator::ColorCoordinator() {
 	_red_mgr = ColorManager();
 	_grn_mgr = ColorManager();
 	_blu_mgr = ColorManager();
