@@ -12,10 +12,10 @@ enum {RED, GREEN, BLUE};
  *		Coordinates the colors of the lights depending
  *		on the status of the touch sensors.
  */
-class ChairAffair_ColorCoordinator {
+class ColorCoordinator {
 public:
 	/**		Constructor */
-	ChairAffair_ColorCoordinator();
+	ColorCoordinator();
 	/**		Flags a color touch sensor as having been touched.
 	 *
 	 *		@param aColor A color, one of RED, GREEN, BLUE

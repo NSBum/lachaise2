@@ -1,6 +1,6 @@
-#include "ChairAffair_ColorCoordinator.h"
+#include "ColorCoordinator.h"
 
-ChairAffair_ColorCoordinator::ChairAffair_ColorCoordinator() {
+ColorCoordinator::olorCoordinator() {
 	_red_mgr = ColorManager();
 	_grn_mgr = ColorManager();
 	_blu_mgr = ColorManager();
@@ -8,7 +8,7 @@ ChairAffair_ColorCoordinator::ChairAffair_ColorCoordinator() {
 
 }
 
-void ChairAffair_ColorCoordinator::colorTouch(uint8_t aColor) {
+void ColorCoordinator::colorTouch(uint8_t aColor) {
 	switch( aColor ) {
 		case RED: {
 			_red_mgr.touch(_baseline_color.red);
@@ -24,7 +24,7 @@ void ChairAffair_ColorCoordinator::colorTouch(uint8_t aColor) {
 	}
 }
 	
-void ChairAffair_ColorCoordinator::colorRelease(uint8_t aColor) {
+void ColorCoordinator::colorRelease(uint8_t aColor) {
 	switch( aColor ) {
 		case RED: {
 			_red_mgr.release();
@@ -41,13 +41,13 @@ void ChairAffair_ColorCoordinator::colorRelease(uint8_t aColor) {
 	}
 }
 
-void ChairAffair_ColorCoordinator::update() {
+void ColorCoordinator::update() {
 	_red_mgr.update();
 	_grn_mgr.update();
 	_blu_mgr.update();
 }
 
-void ChairAffair_ColorCoordinator::setBaselineColor(CRGB aColor) {
+void ColorCoordinator::setBaselineColor(CRGB aColor) {
 	_baseline_color = aColor;
 }
 	
