@@ -18,3 +18,7 @@ This firmware runs on a MK20DX256VLH7 Cortex-M4 ARM processor on a Teensy 3.1 bo
 | J4         	| DEMO MODE SW                                	|
 | J5         	| PWR IN                                      	|
 | J6         	| PWR LED                                     	|
+
+### Functional description ###
+
+The chair can be in one of four operational states: `OpStatePoweringUp`, `OpStateInactive`, `OpStateActive`, and `OpStateDemo`.  A fifth state, `OpStateTuneSensors` is useful during touch debugging.
