@@ -3,9 +3,9 @@
 
 #include <inttypes.h>
 
-class ChairAffair_DemoSwitchManager {
+class DemoSwitchManager {
 public:
-	ChairAffair_DemoSwitchManager(uint8_t aPin);
+	DemoSwitchManager(uint8_t aPin);
 	void update();
 
 	bool state();
