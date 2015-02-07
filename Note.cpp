@@ -1,7 +1,5 @@
 #include "Note.h"
 
-#define NUM_NOTES 7
-
 Note::Note(uint8_t aHue, uint16_t order, uint16_t ledCount) {
 	_hue = aHue;
 	uint8_t length = ledCount/NUM_NOTES;
@@ -10,6 +8,14 @@ Note::Note(uint8_t aHue, uint16_t order, uint16_t ledCount) {
 	if( order == NUM_NOTES - 1 ) {
 		_range.end = _range.end + 1;
 	}
+}
+
+Note::Note() {
+
+}
+
+note_range_t Note::range() {
+	return _range;
 }
 
 void Note::setHue(uint8_t aHue) {
