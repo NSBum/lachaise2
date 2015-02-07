@@ -73,6 +73,8 @@ void setup() {
 	
 	FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
 	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
+
+	Conductor.begin();
 }
 
 void loop() {
