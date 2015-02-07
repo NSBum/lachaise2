@@ -192,7 +192,7 @@ void loop() {
 	// OpStateManager.update();	//	update operational state manager
 	// ColorCoordinator.update();	//	update the color coordinator
 	heartbeat.update();
-	Klavier.update()		//	update touch manager
+	Klavier.update();		//	update touch manager
 	//delay(250);
 	// SerialDebugger.update();
 }
