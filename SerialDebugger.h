@@ -1,10 +1,11 @@
+#if 0
 #ifndef __SERIAL_DEBUGGER
 #define __SERIAL_DEBUGGER
 
 #include "config.h"
 #include <Arduino.h>
+#include <FastLED.h>
 
-#ifdef CHAIR_DEBUG
 
 typedef enum serial_debug_cmd_t {
 	NO_CMD
@@ -24,8 +25,10 @@ private:
 	boolean _serial_in_complete = false;
 
 	serial_debug_cmd_t _current_cmd;
+
+	CRGB _cmd_color;
 };
 
-#endif
 
+#endif
 #endif
