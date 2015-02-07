@@ -32,14 +32,17 @@
 #define EEPROM_INIT_FLAG		0xEE
 
 //	----------- CAP SENSE -----------
-#define CAP_SENSE_NUM_ACTIVE	7
-#define MPR_121_RED				1
-#define MPR_121_GRN				2
-#define MPR_121_BLU				3
-#define MPR_121_RGT				4
-#define MPR_121_MID				6
-#define MPR_121_LFT				7
-#define MPR_121_LCK				8
+#define CAP_SENSE_NUM_ACTIVE	10
+#define MPR_121_RGN_1			0 		//	region 1
+#define MPR_121_RGN_2			1 		//	region 2
+#define MPR_121_RGN_3			2 		//  region 3
+#define MPR_121_RGN_4			3 		//	region 4
+#define MPR_121_RGN_5			4 		//	region 5
+#define MPR_121_RGN_6			5 		//	region 6
+#define MPR_121_RGN_7			6 		//	region 7
+#define MPR_121_RYTH			7 		//	rhythm
+#define MPR_121_COLOR 			8 		//	color
+#define MRP_121_OTHER			9		//	TBD
 
 //	----------- TIMNG AND DELAYS ----------- 
 #define ACTIVE_MODE_TIMEOUT 	15000		//	15000 ms = 15 seconds
