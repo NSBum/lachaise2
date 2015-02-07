@@ -1,9 +1,9 @@
-#include <Note.h>
+#include "Note.h"
 
 #define NUM_NOTES 7
 
-Note::Note(CRGB aColor, uint16_t order, uint16_t ledCount) {
-	_color = aColor;
+Note::Note(uint8_t aHue, uint16_t order, uint16_t ledCount) {
+	_hue = aHue;
 	uint8_t length = ledCount/NUM_NOTES;
 	_range.start = order * length;
 	_range.end = _range.start + length;
@@ -12,7 +12,19 @@ Note::Note(CRGB aColor, uint16_t order, uint16_t ledCount) {
 	}
 }
 
-Note::setColor(CRGB aColor) {
-	_color = aColor;
+void Note::setHue(uint8_t aHue) {
+	_hue = aHue;
+}
+
+uint8_t Note::hue() {
+	return _hue;
+}
+
+void Note::setPlaying(boolean flag) {
+	_playing = flag;
+}
+
+boolean Note::isPlaying() {
+	return _playing;
 }
 
