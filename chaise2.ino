@@ -1,4 +1,3 @@
-
 #include <FastLED.h>
 #include "config.h"
 #include <stdlib.h>
@@ -7,13 +6,14 @@
 
 #include "HeartBeatLED.h"
 #include "ChairAffair_LightBar.h"
-#include "ChairAffair_TouchManager.h"
-#include "ChairAffair_OpStateManager.h"
-#include "ChairAffair_DemoSwitchManager.h"
+#include "TouchManager.h"
+#include "OpStateManager.h"
+#include "DemoSwitchManager.h"
 #include "TouchManager.h"
 #include "ColorCoordinator.h"
-#include "SerialDebugger.h"
+//#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
+#include "Note.h" 			//	a "note" played on the "keys"
 
 #define NOP __asm__ __volatile__ ("nop\n\t")
 
@@ -34,25 +34,25 @@ Heartbeat heartbeat(LED_BUILTIN,250,2000);
 // ChairAffair_OpStateManager OpStateManager = ChairAffair_OpStateManager();
 // ChairAffair_DemoSwitchManager DemoSwitchManager = ChairAffair_DemoSwitchManager(DEMO_SW_PIN);
 // ChairAffair_ColorCoordinator ColorCoordinator = ChairAffair_ColorCoordinator();
-TouchManager TouchManager = TouchManager();
-SerialDebugger SerialDebugger = SerialDebugger();
+TouchManager touch = TouchManager();
+//SerialDebugger SerialDebugger = SerialDebugger();
 uint16_t loop_count = 0;
 
 CRGB leds[NUM_LEDS];
 
 #ifdef CHAIR_DEBUG
-ChairAffair_SerialDebugger SerialDebugger = ChairAffair_SerialDebugger();
+//ChairAffair_SerialDebugger SerialDebugger = ChairAffair_SerialDebugger();
 #endif
 
 void setup() {
 	delay(10);
 
 	init_dx_leds();
-	flash(GRN_DX,2);
+	flash(DX_1,2);
 
 	delay(1000);
 	Serial.begin(115200);
-	TouchManager.begin();
+	touch.begin();
 
 	#ifdef CHAIR_DEBUG 
 	
@@ -66,13 +66,13 @@ void setup() {
 	DEBUG_PRINT("Checking I2C interface to cap touch sensor...");
 
 	
-	if( TouchManager.sensorOnline() ) {
+	if( touch.sensorOnline() ) {
 		DEBUG_PRINTLN("OK");
-		flash(GRN_DX,2);
+		flash(DX_1,2);
 	}
 	else {
 		DEBUG_PRINTLN("FAILED");
-		flash(RED_DX,2);
+		flash(DX_2,2);
 	}
 	
 	//	when we're done with setup advance the op state
@@ -80,7 +80,8 @@ void setup() {
 }
 
 void loop() {
-	
+	uint16_t n = touch.newTouches();
+	Serial.print("New touches = "); Serial.println(n,HEX);
 	// switch( OpStateManager.state() ) {
 	// 	case OpStatePoweringUp: {
 	// 		DEBUG_PRINTLN("Op state: powering up");
@@ -126,34 +127,34 @@ void loop() {
 	// 		ColorCoordinator.setBaselineColor(currentColor);
 	// 	}
 	// }
-	#ifdef CHAIR_DEBUG
-	switch( SerialDebugger.currentCommand() ) {
-		case NO_CMD: {
-			NOP;
-			break;
-		}
-		case FORCE_DEMO: {
-			break;
-		}
-		case FORCE_INACTIVE: {
-			break;
-		}
-		case CSET: {
-			for(uint16_t i = 0; i < NUM_LEDS; i++) {
-				leds[i] = SerialDebugger.commandColor();
-			}
-			break;
-		}
-		case FTUNE: {
-			DEBUG_PRINTLN("Kalimba Chair: Fine tuning mode");
-			DEBUG_PRINT("FTUNE> ");
-		}
-		default: {
-			DEBUG_PRINTLN("Unrecognized cmd");
-			break;
-		}
-	}
-	#endif
+	// #ifdef CHAIR_DEBUG
+	// switch( SerialDebugger.currentCommand() ) {
+	// 	case NO_CMD: {
+	// 		NOP;
+	// 		break;
+	// 	}
+	// 	case FORCE_DEMO: {
+	// 		break;
+	// 	}
+	// 	case FORCE_INACTIVE: {
+	// 		break;
+	// 	}
+	// 	case CSET: {
+	// 		for(uint16_t i = 0; i < NUM_LEDS; i++) {
+	// 			leds[i] = SerialDebugger.commandColor();
+	// 		}
+	// 		break;
+	// 	}
+	// 	case FTUNE: {
+	// 		DEBUG_PRINTLN("Kalimba Chair: Fine tuning mode");
+	// 		DEBUG_PRINT("FTUNE> ");
+	// 	}
+	// 	default: {
+	// 		DEBUG_PRINTLN("Unrecognized cmd");
+	// 		break;
+	// 	}
+	// }
+	// #endif
 
 	// noInterrupts();
  //    FastLED.show();
@@ -164,15 +165,16 @@ void loop() {
 	// OpStateManager.update();	//	update operational state manager
 	// ColorCoordinator.update();	//	update the color coordinator
 	heartbeat.update();
-	TouchManager.update();		//	update touch manager
-	SerialDebugger.update();
+	touch.update();		//	update touch manager
+	delay(250);
+	// SerialDebugger.update();
 }
 
-#ifdef CHAIR_DEBUG
-	void serialEvent() {
-		while( Serial.available() ) {
-			char in_char = (char)Serial.read(); 
-			SerialDebugger.addChar(in_char);
-		}
-	}
-#endif
+// #ifdef CHAIR_DEBUG
+// 	void serialEvent() {
+// 		while( Serial.available() ) {
+// 			char in_char = (char)Serial.read(); 
+// 			SerialDebugger.addChar(in_char);
+// 		}
+// 	}
+// #endif
