@@ -9,7 +9,7 @@ typedef struct dx_led_t {
 	int pin;
 } dx_led_t;
 
-enum {RED_DX, GRN_DX, YLW_DX};
+enum {DX_1, DX_2, DX_3};
 
 dx_led_t dx_leds[3];
 uint8_t idx_active_dx_led;
@@ -36,7 +36,7 @@ void isr_dx_led() {
 }
 
 void init_dx_leds() {
-	uint8_t hw_pins[3] = {RED_DX_LED_PIN, GRN_DX_LED_PIN, YLW_DX_LED_PIN};
+	uint8_t hw_pins[3] = {DX_1_LED_PIN, DX_2_LED_PIN, DX_3_LED_PIN};
 
 	for(uint8_t i = 0; i < 3; i++ ) {
 		dx_led_t led = dx_leds[i];
