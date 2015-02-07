@@ -6,7 +6,7 @@
 #define NUM_LEDS 			120
 #define DATA_PIN 			11			//	on the Teensy 3.1, use the hardware DOUT pin (11)
 #define CHIPSET				WS2812B		//	using the Pololu strips, select the driver chip that it uses.
-#define BRIGHTNESS  		200			//	global brightness
+#define BRIGHTNESS  		0xFF		//	global brightness
 #define COLOR_ORDER 		GRB			//	color order in the data
 #define FRAMES_PER_SECOND 	60			//	display frames
 
@@ -43,6 +43,8 @@
 #define MPR_121_RYTH			7 		//	rhythm
 #define MPR_121_COLOR 			8 		//	color
 #define MRP_121_OTHER			9		//	TBD
+
+#define MAX_TOUCH_IDX			MRP_121_OTHER
 
 //	----------- TIMNG AND DELAYS ----------- 
 #define ACTIVE_MODE_TIMEOUT 	15000		//	15000 ms = 15 seconds
