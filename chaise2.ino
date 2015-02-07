@@ -5,6 +5,8 @@
 #include <Wire.h>
 #include <EEPROM.h>
 
+#include <Clavier.h>
+
 #include "HeartBeatLED.h"
 #include "ChairAffair_LightBar.h"
 #include "OpStateManager.h"
@@ -30,20 +32,19 @@
 #endif
 
 Heartbeat heartbeat(LED_BUILTIN,250,2000);
-// ChairAffair_LightBar DemoBar(0,10, NUM_LEDS >> 2,10);
-// ChairAffair_OpStateManager OpStateManager = ChairAffair_OpStateManager();
-// ChairAffair_DemoSwitchManager DemoSwitchManager = ChairAffair_DemoSwitchManager(DEMO_SW_PIN);
-// ChairAffair_ColorCoordinator ColorCoordinator = ChairAffair_ColorCoordinator();
 NoteManager noteManager = NoteManager();
-//SerialDebugger SerialDebugger = SerialDebugger();
 uint16_t loop_count = 0;
 
 CRGB leds[NUM_LEDS];
 Note notes[NUM_NOTES];
 
-#ifdef CHAIR_DEBUG
-//ChairAffair_SerialDebugger SerialDebugger = ChairAffair_SerialDebugger();
-#endif
+void welcomePrint() {
+	DEBUG_PRINTLN("Kalimba Chair Software");
+	DEBUG_PRINTLN("Software version 1.0.0");
+	DEBUG_PRINTLN("by Alan K. Duncan");
+	DEBUG_PRINTLN("==========");
+	DEBUG_PRINT("Checking I2C interface to cap touch sensor...");
+}
 
 void setup() {
 	delay(10);
@@ -53,21 +54,16 @@ void setup() {
 
 	delay(1000);
 	Serial.begin(115200);
-	clavier_begin();
+	Klavier.begin();
 
 	#ifdef CHAIR_DEBUG 
 	
 	delay(2000);		//	ample time to get the serial interface started on the host.
 	#endif
 	digitalWrite(LED_BUILTIN,LOW);
-	DEBUG_PRINTLN("Kalimba Chair Software");
-	DEBUG_PRINTLN("Software version 1.0.0");
-	DEBUG_PRINTLN("by Alan K. Duncan");
-	DEBUG_PRINTLN("==========");
-	DEBUG_PRINT("Checking I2C interface to cap touch sensor...");
+	welcomePrint();
 
-	
-	if( clavier_sensor_online() ) {
+	if( Klavier.sensorOnline() ) {
 		DEBUG_PRINTLN("OK");
 		flash(DX_1,2);
 	}
@@ -77,33 +73,30 @@ void setup() {
 	}
 	
 	FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
-
-	//	when we're done with setup advance the op state
-	// OpStateManager.setState(OpStateInactive);
 }
 
 void loop() {
-	// uint16_t n = clavier_new_touches();
-	// if( n != 0 ) {
-	// 	//Serial.print("New touches = "); Serial.println(n,HEX);
-	// 	std::bitset<10> b_n (n);
-	// 	for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
-	// 		if( b_n.test(i) ) {
-	// 			//Serial.print("will play "); Serial.println(i);
-	// 			noteManager.play(i);
-	// 		}
-	// 	}
-	// }
-	// uint16_t r = clavier_new_releases();
-	// if( r != 0 ) {
-	// 	//Serial.print("New releases = "); Serial.println(r,HEX);
-	// 	std::bitset<10> b_r (r);
-	// 	for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
-	// 		if( b_r.test(i) ) {
-	// 			noteManager.release(i);
-	// 		}
-	// 	}
-	// }
+	uint16_t n = Klavier.newTouches();
+	if( n != 0 ) {
+		//Serial.print("New touches = "); Serial.println(n,HEX);
+		std::bitset<10> b_n (n);
+		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
+			if( b_n.test(i) ) {
+				//Serial.print("will play "); Serial.println(i);
+				noteManager.play(i);
+			}
+		}
+	}
+	uint16_t r = Klavier.newReleases();
+	if( r != 0 ) {
+		//Serial.print("New releases = "); Serial.println(r,HEX);
+		std::bitset<10> b_r (r);
+		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
+			if( b_r.test(i) ) {
+				noteManager.release(i);
+			}
+		}
+	}
 		
 	// switch( OpStateManager.state() ) {
 	// 	case OpStatePoweringUp: {
@@ -199,7 +192,7 @@ void loop() {
 	// OpStateManager.update();	//	update operational state manager
 	// ColorCoordinator.update();	//	update the color coordinator
 	heartbeat.update();
-	clavier_update();		//	update touch manager
+	Klavier.update()		//	update touch manager
 	//delay(250);
 	// SerialDebugger.update();
 }
