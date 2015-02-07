@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 #include <config.h>
-#include <FastLED.h>
+#include <Arduino.h>
 
 typedef struct note_range_t {
 	uint16_t start;
@@ -12,12 +12,17 @@ typedef struct note_range_t {
 
 class Note {
 public:
-	Note(CRGB aColor, uint16_t order, uint16_t ledCount);
+	Note(uint8_t aHue, uint16_t order, uint16_t ledCount);
 
-	void setColor(CRGB aColor);
+	void setHue(uint8_t aHue);
+	uint8_t hue();
+
+	void setPlaying(boolean flag);
+	boolean isPlaying();
 
 private:
-	CRGB _color;
+	boolean _playing;
+	uint8_t _hue;
 	note_range_t _range;
 };
 
