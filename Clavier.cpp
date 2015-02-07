@@ -58,17 +58,17 @@ bool Clavier::update() {
 	for( uint8_t i = 0; i<12; i++ ) {
     	// it if *is* touched and *wasnt* touched before, alert!
     	if( (currtouched & _BV(i)) && !(lasttouched & _BV(i)) ) {
-      		Serial.print(i); Serial.println(" touched");
+      		//Serial.print(i); Serial.println(" touched");
       		_new_touches |= _BV(i);
     	}
     	// if it *was* touched and now *isnt*, alert!
     	if( !(currtouched & _BV(i)) && (lasttouched & _BV(i)) ) {
-      		Serial.print(i); Serial.println(" released");
+      		//Serial.print(i); Serial.println(" released");
       		_new_releases |= _BV(i);
     	}
 	}
 	lasttouched = currtouched; 
-	Serial.print("("); Serial.print(lasttouched,HEX); Serial.println(")");
+	//Serial.print("("); Serial.print(lasttouched,HEX); Serial.println(")");
 }
 
 uint16_t Clavier::newTouches() {
