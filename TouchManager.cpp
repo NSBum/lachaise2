@@ -4,20 +4,26 @@
 
 
 TouchManager::TouchManager() {
-	_sensor_map[MPR_121_RED] = SENSOR_IDX_RED;
-	_sensor_map[MPR_121_GRN] = SENSOR_IDX_GRN;
-	_sensor_map[MPR_121_BLU] = SENSOR_IDX_BLU;
+	// _sensor_map[MPR_121_RED] = SENSOR_IDX_RED;
+	// _sensor_map[MPR_121_GRN] = SENSOR_IDX_GRN;
+	// _sensor_map[MPR_121_BLU] = SENSOR_IDX_BLU;
 }
 
 void TouchManager::begin() {
 	_active_flags = 0;
-	_active_flags |= (1 << MPR_121_RED);
-	_active_flags |= (1 << MPR_121_GRN);
-	_active_flags |= (1 << MPR_121_BLU);
-	_active_flags |= (1 << MPR_121_RGT);
-	_active_flags |= (1 << MPR_121_MID);
-	_active_flags |= (1 << MPR_121_LFT);
-	_active_flags |= (1 << MPR_121_LCK);
+	//	region sensors are active
+	_active_flags |= (1 << MPR_121_RGN_1);
+	_active_flags |= (1 << MPR_121_RGN_2);
+	_active_flags |= (1 << MPR_121_RGN_3);
+	_active_flags |= (1 << MPR_121_RGN_4);
+	_active_flags |= (1 << MPR_121_RGN_5);
+	_active_flags |= (1 << MPR_121_RGN_6);
+	_active_flags |= (1 << MPR_121_RGN_7);
+
+	//	global function sensors are active too
+	_active_flags |= (1 << MPR_121_RYTH);
+	_active_flags |= (1 << MPR_121_COLOR);
+	_active_flags |= (1 << MRP_121_OTHER);
 
 	_sensor_interface = Adafruit_MPR121();
 
