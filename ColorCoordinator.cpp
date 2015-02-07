@@ -51,6 +51,6 @@ void ColorCoordinator::setBaselineColor(CRGB aColor) {
 	_baseline_color = aColor;
 }
 	
-CRGB ChairAffair_ColorCoordinator::drivingColor() {
+CRGB ColorCoordinator::drivingColor() {
 	return CRGB(_red_mgr.value(), _grn_mgr.value(), _blu_mgr.value());
 }
