@@ -7,12 +7,15 @@
 class NoteManager {
 public:
 	NoteManager();
-	void play(uint8_t touchIndex);
-	void release(uint8_t touchIndex);
-	void update(CRGB leds[]);
+	static void play(uint8_t touchIndex);
+	static void release(uint8_t touchIndex);
+	static void update(CRGB leds[]);
 
 private:
-	Note _notes[NUM_NOTES];
+	static const Note *_notes;
+	static uint8_t noteIndexForTouch(uint8_t touchIndex);
 };
+
+extern NoteManager Conductor;
 
 #endif
