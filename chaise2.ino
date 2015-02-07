@@ -32,7 +32,6 @@
 #endif
 
 Heartbeat heartbeat(LED_BUILTIN,250,2000);
-NoteManager noteManager = NoteManager();
 uint16_t loop_count = 0;
 
 CRGB leds[NUM_LEDS];
@@ -73,6 +72,7 @@ void setup() {
 	}
 	
 	FastLED.addLeds<CHIPSET, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
+	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
 }
 
 void loop() {
@@ -83,7 +83,7 @@ void loop() {
 		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
 			if( b_n.test(i) ) {
 				//Serial.print("will play "); Serial.println(i);
-				noteManager.play(i);
+				Conductor.play(i);
 			}
 		}
 	}
@@ -93,7 +93,7 @@ void loop() {
 		std::bitset<10> b_r (r);
 		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
 			if( b_r.test(i) ) {
-				noteManager.release(i);
+				Conductor.release(i);
 			}
 		}
 	}
@@ -175,7 +175,7 @@ void loop() {
 	//	clear the buffer
 	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
 	//	update the note manager *before* showing leds
-	noteManager.update(leds);
+	Conductor.update(leds);
 
 	// if( loop_count++ % 1000 == 0 ) {
 	// 	for(uint16_t i = 0; i < NUM_LEDS; i++ ) {
