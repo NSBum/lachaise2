@@ -4,6 +4,13 @@
 #include <FastLED.h>
 #include "Note.h"
 
+typedef struct note_t {
+	uint16_t start;
+	uint16_t end;
+	uint8_t hue;
+	bool playing;
+}
+
 class NoteManager {
 public:
 	NoteManager();
