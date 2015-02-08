@@ -15,6 +15,9 @@
 //#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
 #include "NoteManager.h"	//	manages/coordinates the notes
+#include "PedalManager.h"
+#include "KeySignatureManager.h"
+#include "ChordManager.h"
 
 #define NOP __asm__ __volatile__ ("nop\n\t")
 
@@ -73,6 +76,9 @@ void setup() {
 	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
 
 	Conductor.begin();
+	PedalBoard.begin();
+	Transposer.begin();
+	Chord.begin();
 }
 
 void loop() {
@@ -82,8 +88,16 @@ void loop() {
 		std::bitset<10> b_n (n);
 		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
 			if( b_n.test(i) ) {
-				//Serial.print("will play "); Serial.println(i);
-				Conductor.play(i);
+				//	route the message to either the Conductor
+				//	or the PedalBoard
+				if( i < NUM_NOTES ) 
+					Conductor.play(i);
+				else if( i == 7 ) {
+					Chord.play();
+				}
+				else {
+					PedalBoard.depress(i);
+				}
 			}
 		}
 	}
@@ -93,7 +107,14 @@ void loop() {
 		std::bitset<10> b_r (r);
 		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
 			if( b_r.test(i) ) {
-				Conductor.release(i);
+				if( i < NUM_NOTES )
+					Conductor.release(i);
+				else if( i == 7 ) {
+					Chord.release();
+				}
+				else {
+					PedalBoard.release(i);
+				}
 			}
 		}
 	}
@@ -174,6 +195,8 @@ void loop() {
 
 	//	clear the buffer
 	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
+	//	update the chord manger before showing leds
+	Chord.update(leds);
 	//	update the note manager *before* showing leds
 	Conductor.update(leds);
 
@@ -193,6 +216,26 @@ void loop() {
 	// ColorCoordinator.update();	//	update the color coordinator
 	heartbeat.update();
 	Klavier.update();		//	update touch manager
+	PedalFunction pedal = PedalBoard.update();
+	if( pedal == PedalChangePalette ) {
+		Transposer.toggle();
+	}
+	else if( pedal == PedalToggleEcho ) {
+		Conductor.toggleEcho();
+	}
+	else if( pedal == PedalToggleFade) {
+		Conductor.toggleSlowMode();
+	}
+	if( Transposer.update() ) {
+		CRGB palette[7];
+		Serial.println("Transposer updated");
+		Transposer.palette(palette);
+		for(uint8_t i = 0; i < 7; i++ ) {
+			//Serial.print(palette[i].hue); Serial.print(" ");
+			Conductor.setColor(i, palette[i]);
+		}
+		DEBUG_PRINTLN("");
+	}
 	//delay(250);
 	// SerialDebugger.update();
 }
