@@ -7,7 +7,7 @@ typedef enum PedalFunction {
 	PedalNoFunction = 0,
 	PedalChangePalette,
 	PedalToggleEcho,
-	PedalToggleFade
+	PedalToggleFade,
 };	
 
 class PedalManager {
