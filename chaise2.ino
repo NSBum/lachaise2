@@ -14,7 +14,6 @@
 #include "ColorCoordinator.h"
 //#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
-#include "Note.h" 			//	a "note" played on the "keys"
 #include "NoteManager.h"	//	manages/coordinates the notes
 
 #define NOP __asm__ __volatile__ ("nop\n\t")
@@ -35,7 +34,6 @@ Heartbeat heartbeat(LED_BUILTIN,250,2000);
 uint16_t loop_count = 0;
 
 CRGB leds[NUM_LEDS];
-Note notes[NUM_NOTES];
 
 void welcomePrint() {
 	DEBUG_PRINTLN("Kalimba Chair Software");
