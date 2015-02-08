@@ -2,7 +2,7 @@
 #define _CHAIR_AFFAIR_NOTE_MANAGER
 
 #include <FastLED.h>
-#include "Note.h"
+#define NUM_NOTES 7
 
 /**
  *	A note type

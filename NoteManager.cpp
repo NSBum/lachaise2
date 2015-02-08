@@ -1,4 +1,5 @@
 #include "NoteManager.h"
+#include "config.h"
 
 //	define this symbols to debug to serial connection
 #undef DEBUG_NOTE_CREATION
