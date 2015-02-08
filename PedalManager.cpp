@@ -4,6 +4,8 @@
 #define SENSOR_TOGGLE_ECHO 8
 #define SENSOR_TOGGLE_FADE 9
 
+PedalFunction PedalManager::_function = PedalNoFunction;
+
 PedalManager::PedalManager() {
 
 }
@@ -16,6 +18,7 @@ void PedalManager::depress(uint8_t touchIndex) {
 	switch(touchIndex) {
 		case SENSOR_CHANGE_PALETTE: {
 			_function = PedalChangePalette;
+			Serial.println("PED | Palette chg");
 			break;
 		}
 		case SENSOR_TOGGLE_ECHO: {
@@ -38,5 +41,7 @@ void PedalManager::release(uint8_t touchIndex) {
 }
 
 PedalFunction PedalManager::update() {
-	return _function;
+	PedalFunction temp = _function;
+	_function = PedalNoFunction;
+	return temp;
 }
