@@ -36,13 +36,16 @@
 #define DEBUG_PRINTLN_F(x,f)	NOP
 #endif
 
-//	
+//	let everyone know we are alive
 Heartbeat heartbeat(LED_BUILTIN,250,2000);
+//	manage the demo switch
 DemoSwitchManager DemoButton(DEMO_SW_PIN);
+//	manage the demo mode
 DemoModeManager DemoMode(DEMO_MODE_LED_PIN);
+//	track our passes through the loop
 uint16_t loop_count = 0;
+//	last state of the demo switch
 demo_sw_t lastDemoSwitchState = DemoSwitchUnchanged;
-
 //	ms timestamp at the last touch
 uint32_t lastTouchTime;
 CRGB leds[NUM_LEDS];
@@ -170,8 +173,11 @@ void loop() {
     interrupts();
     FastLED.delay(40);
 
-	heartbeat.update();
-	Klavier.update();		//	update touch manager
+    //	update the heartbeat LED
+	heartbeat.update();		
+	//	update the touch manager
+	Klavier.update();
+	//	update the pedalboard and get its function
 	PedalFunction pedal = PedalBoard.update();
 	if( pedal == PedalChangePalette ) {
 		Transposer.toggle();
