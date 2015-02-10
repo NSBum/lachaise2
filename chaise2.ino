@@ -1,4 +1,6 @@
+
 #include <FastLED.h>
+#include "DemoSwitchManager.h"
 #include "config.h"
 #include <stdlib.h>
 #include <bitset>
@@ -10,7 +12,7 @@
 #include "HeartBeatLED.h"
 #include "ChairAffair_LightBar.h"
 #include "OpStateManager.h"
-#include "DemoSwitchManager.h"
+
 #include "ColorCoordinator.h"
 //#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
@@ -18,6 +20,7 @@
 #include "PedalManager.h"
 #include "KeySignatureManager.h"
 #include "ChordManager.h"
+#include "DemoModeManager.h"
 
 #define NOP __asm__ __volatile__ ("nop\n\t")
 
@@ -33,9 +36,15 @@
 #define DEBUG_PRINTLN_F(x,f)	NOP
 #endif
 
+//	
 Heartbeat heartbeat(LED_BUILTIN,250,2000);
+DemoSwitchManager DemoButton(DEMO_SW_PIN);
+DemoModeManager DemoMode(DEMO_MODE_LED_PIN);
 uint16_t loop_count = 0;
+demo_sw_t lastDemoSwitchState = DemoSwitchUnchanged;
 
+//	ms timestamp at the last touch
+uint32_t lastTouchTime;
 CRGB leds[NUM_LEDS];
 
 void welcomePrint() {
@@ -79,15 +88,45 @@ void setup() {
 	PedalBoard.begin();
 	Transposer.begin();
 	Chord.begin();
+
+	lastTouchTime = 0;
 }
 
 void loop() {
+	//	see if demo switch was thrown
+	demo_sw_t demoSwitchState = DemoButton.state();
+	if( lastDemoSwitchState != demoSwitchState ) {
+		switch( demoSwitchState ) {
+			case DemoSwitchTurnedOn: {
+				DEBUG_PRINTLN("DEMO SW ON");
+				DemoMode.start();
+				break;
+			}
+			case DemoSwitchTurnedOff: {
+				DEBUG_PRINTLN("DEMO SW OFF");
+				DemoMode.stop();
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+		lastDemoSwitchState = demoSwitchState;
+	}
+	
+
 	uint16_t n = Klavier.newTouches();
 	if( n != 0 ) {
 		//Serial.print("New touches = "); Serial.println(n,HEX);
 		std::bitset<10> b_n (n);
 		for(uint16_t i = 0; i <= MAX_TOUCH_IDX; i++) {
 			if( b_n.test(i) ) {
+				//	something was touched, record the time
+				lastTouchTime = millis();
+				//	do we need to override the demo mode?
+				if( DemoMode.state() ) {
+					DemoMode.override();
+				}
 				//	route the message to either the Conductor
 				//	or the PedalBoard
 				if( i < NUM_NOTES ) 
@@ -118,80 +157,6 @@ void loop() {
 			}
 		}
 	}
-		
-	// switch( OpStateManager.state() ) {
-	// 	case OpStatePoweringUp: {
-	// 		DEBUG_PRINTLN("Op state: powering up");
-	// 		break;
-	// 	}
-	// 	case OpStateInactive: {
-	// 		//	handle updating inactive state
-	// 		break;
-	// 	}
-	// 	case OpStateActive: {
-	// 		//	handle active state
-	// 		break;
-	// 	}
-	// 	case OpStateDemo: {
-	// 		//	in the demo state, 
-	// 		//	possibly shift it even faster (or slower)
-	// 		int rand_shift = random(1000);
-	// 		int16_t inc = DemoBar.delta_16();
-	// 		if( rand_shift < 100 ) {
-	// 			if( rand_shift < 10 ) {
-	// 				inc = 0;
-	// 			}
-	// 			else {
-	// 				inc = inc >> 2;
-	// 			}
-	// 		}
-	// 		DemoBar.addPosition(inc);
-	// 		if( DemoBar.position_16() >= (NUM_LEDS << 4) ) {
-	// 			DemoBar.addPosition(0 - (NUM_LEDS << 4));
-	// 		}
-			
-	// 		//	clear the pixel buffer
-	// 		memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
-	// 		//	slowly shift the hue
-	// 		DemoBar.addHue((loop_count % 4 == 0)?1:0);
-
-	// 		//	draw background (DemoBar);
-	// 		DemoBar.drawAntiAliasedBar(&leds[NUM_LEDS]);
-	// 		break;
-
-	// 		//	update the color coordinator
-	// 		CRGB currentColor = CHSV(DemoBar.hue_16(),0xFF, 0xFF);
-	// 		ColorCoordinator.setBaselineColor(currentColor);
-	// 	}
-	// }
-	// #ifdef CHAIR_DEBUG
-	// switch( SerialDebugger.currentCommand() ) {
-	// 	case NO_CMD: {
-	// 		NOP;
-	// 		break;
-	// 	}
-	// 	case FORCE_DEMO: {
-	// 		break;
-	// 	}
-	// 	case FORCE_INACTIVE: {
-	// 		break;
-	// 	}
-	// 	case CSET: {
-	// 		for(uint16_t i = 0; i < NUM_LEDS; i++) {
-	// 			leds[i] = SerialDebugger.commandColor();
-	// 		}
-	// 		break;
-	// 	}
-	// 	case FTUNE: {
-	// 		DEBUG_PRINTLN("Kalimba Chair: Fine tuning mode");
-	// 		DEBUG_PRINT("FTUNE> ");
-	// 	}
-	// 	default: {
-	// 		DEBUG_PRINTLN("Unrecognized cmd");
-	// 		break;
-	// 	}
-	// }
-	// #endif
 
 	//	clear the buffer
 	memset8( leds, 0, NUM_LEDS * sizeof(CRGB));
@@ -200,20 +165,11 @@ void loop() {
 	//	update the note manager *before* showing leds
 	Conductor.update(leds);
 
-	// if( loop_count++ % 1000 == 0 ) {
-	// 	for(uint16_t i = 0; i < NUM_LEDS; i++ ) {
-	// 		Serial.println(leds[i].red);
-	// 	}
-	// }
-
 	noInterrupts();
     FastLED.show();
     interrupts();
     FastLED.delay(40);
 
-	// DemoSwitchManager.update();	//	update the status of debounced demo switch
-	// OpStateManager.update();	//	update operational state manager
-	// ColorCoordinator.update();	//	update the color coordinator
 	heartbeat.update();
 	Klavier.update();		//	update touch manager
 	PedalFunction pedal = PedalBoard.update();
@@ -236,15 +192,29 @@ void loop() {
 		}
 		DEBUG_PRINTLN("");
 	}
-	//delay(250);
-	// SerialDebugger.update();
+	DemoButton.update();
+	uint16_t noteIdx = DemoMode.update();
+	if( noteIdx != DEMO_MODE_NO_NOTE ) {
+		//	we need to play a real note
+		Conductor.play(noteIdx);
+	}
+	else {
+		//	release every note if demo manager has nothing for us
+		// 	** unless ** we are in demo override
+		if( lastTouchTime == 0 ) {
+			for(uint8_t i = 0; i < NUM_NOTES; i++ ) {
+				Conductor.release(i);
+			}
+		}
+	}
+	//	are we in Demo override?
+	if( lastTouchTime != 0 ) {
+		if( millis() - lastTouchTime > 15000 ) {
+			if( DemoMode.overrideState() ) {
+				DemoMode.start();
+			}
+			lastTouchTime = 0;
+		}
+	}
+	loop_count++;
 }
-
-// #ifdef CHAIR_DEBUG
-// 	void serialEvent() {
-// 		while( Serial.available() ) {
-// 			char in_char = (char)Serial.read(); 
-// 			SerialDebugger.addChar(in_char);
-// 		}
-// 	}
-// #endif
