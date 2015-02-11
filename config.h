@@ -3,6 +3,20 @@
 
 #define CHAIR_DEBUG
 
+#define NOP __asm__ __volatile__ ("nop\n\t")
+
+#ifdef CHAIR_DEBUG
+#define DEBUG_PRINT(x) 			Serial.print(x)
+#define DEBUG_PRINTLN(x)		Serial.println(x)
+#define DEBUG_PRINT_F(x,f)		Serial.print(x,f)
+#define DEBUG_PRINTLN_F(x,f)	Serial.println(x,f)
+#else
+#define DEBUG_PRINT(x) 			NOP
+#define DEBUG_PRINTLN(x)		NOP
+#define DEBUG_PRINT_F(x,f)		NOP
+#define DEBUG_PRINTLN_F(x,f)	NOP
+#endif
+
 #define NUM_LEDS 			120
 #define DATA_PIN 			11			//	on the Teensy 3.1, use the hardware DOUT pin (11)
 #define CHIPSET				WS2812B		//	using the Pololu strips, select the driver chip that it uses.
