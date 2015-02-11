@@ -22,19 +22,7 @@
 #include "ChordManager.h"
 #include "DemoModeManager.h"
 
-#define NOP __asm__ __volatile__ ("nop\n\t")
 
-#ifdef CHAIR_DEBUG
-#define DEBUG_PRINT(x) 			Serial.print(x)
-#define DEBUG_PRINTLN(x)		Serial.println(x)
-#define DEBUG_PRINT_F(x,f)		Serial.print(x,f)
-#define DEBUG_PRINTLN_F(x,f)	Serial.println(x,f)
-#else
-#define DEBUG_PRINT(x) 			NOP
-#define DEBUG_PRINTLN(x)		NOP
-#define DEBUG_PRINT_F(x,f)		NOP
-#define DEBUG_PRINTLN_F(x,f)	NOP
-#endif
 
 //	let everyone know we are alive
 Heartbeat heartbeat(LED_BUILTIN,250,2000);
@@ -167,7 +155,30 @@ void loop() {
 	Chord.update(leds);
 	//	update the note manager *before* showing leds
 	Conductor.update(leds);
-
+	
+	uint16_t noteIdx = DemoMode.update(leds);
+	if( noteIdx != DEMO_MODE_NO_NOTE ) {
+		//	we need to play a real note
+		Conductor.play(noteIdx);
+	}
+	else {
+		//	release every note if demo manager has nothing for us
+		// 	** unless ** we are in demo override
+		if( lastTouchTime == 0 ) {
+			for(uint8_t i = 0; i < NUM_NOTES; i++ ) {
+				Conductor.release(i);
+			}
+		}
+	}
+	//	are we in Demo override?
+	if( lastTouchTime != 0 ) {
+		if( millis() - lastTouchTime > 15000 ) {
+			if( DemoMode.overrideState() ) {
+				DemoMode.start();
+			}
+			lastTouchTime = 0;
+		}
+	}
 	noInterrupts();
     FastLED.show();
     interrupts();
@@ -199,28 +210,6 @@ void loop() {
 		DEBUG_PRINTLN("");
 	}
 	DemoButton.update();
-	uint16_t noteIdx = DemoMode.update();
-	if( noteIdx != DEMO_MODE_NO_NOTE ) {
-		//	we need to play a real note
-		Conductor.play(noteIdx);
-	}
-	else {
-		//	release every note if demo manager has nothing for us
-		// 	** unless ** we are in demo override
-		if( lastTouchTime == 0 ) {
-			for(uint8_t i = 0; i < NUM_NOTES; i++ ) {
-				Conductor.release(i);
-			}
-		}
-	}
-	//	are we in Demo override?
-	if( lastTouchTime != 0 ) {
-		if( millis() - lastTouchTime > 15000 ) {
-			if( DemoMode.overrideState() ) {
-				DemoMode.start();
-			}
-			lastTouchTime = 0;
-		}
-	}
+	
 	loop_count++;
 }
