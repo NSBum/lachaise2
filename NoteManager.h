@@ -18,13 +18,13 @@ typedef enum {
  *
  */
 typedef struct note_t {
-	uint16_t start;		/**< linear start location */
-	uint16_t end;		/**< linear end location */
-	bool playing;		/**< true if playing, otherwise false */
-	CRGB color;
-	uint8_t fade;		/**< fade if slow mode */
-	fade_dir_t fadeDirection;
-	uint32_t lastFadeTime;
+	uint16_t start;				/**< linear start location */
+	uint16_t end;				/**< linear end location */
+	bool playing;				/**< true if playing, otherwise false */
+	CRGB color;					/**< color of the note */
+	uint8_t fade;				/**< fade if slow mode */
+	fade_dir_t fadeDirection;	/**< fade direction up, down, none */
+	uint32_t lastFadeTime;		/**< ms timestamp when the last fade action happened */
 } note_t;
 
 typedef std::vector<note_t> note_vec_t;
@@ -76,10 +76,21 @@ public:
 	 */
 	static void update(CRGB leds[]);
 
+	/**	Sets the color of a note
+	 *
+	 *	@param noteIndex the index of the note being set
+	 *	@param color the RGB color of the note
+	 */
 	static void setColor(uint8_t noteIndex, CRGB color);
 
+	/**	Toggles slow mode
+	 *
+	 *	The slow mode causes notes to fade up and down slowly; i.e. prolongs the
+	 *	attack and decay of the note.
+	 */
 	static void toggleSlowMode();
 
+	/**	Toggles the echo effect */
 	static void toggleEcho();
 
 	/**	Initialization of the notes
