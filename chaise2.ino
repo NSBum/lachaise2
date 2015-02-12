@@ -10,10 +10,7 @@
 #include <Clavier.h>
 
 #include "HeartBeatLED.h"
-#include "ChairAffair_LightBar.h"
-#include "OpStateManager.h"
-
-#include "ColorCoordinator.h"
+//#include "OpStateManager.h"
 //#include "SerialDebugger.h"
 #include "DxLEDTimers.h"
 #include "NoteManager.h"	//	manages/coordinates the notes
