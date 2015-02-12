@@ -1,7 +1,5 @@
 #include "HeartBeatLED.h"
 
-
-
 Heartbeat::Heartbeat(uint8_t pin, uint32_t on, uint32_t off) {
 	_pin = pin;
 	_ledState = LOW;
