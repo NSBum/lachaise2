@@ -3,12 +3,32 @@
 
 #include <FastLED.h>
 
+/**	Manager for "chords"
+ *
+ *	This class manages background chords, a sort of "polyphonic" background.
+ */
 class ChordManager {
 public:
+	/**	Constructor */
 	ChordManager();
+
+	/**	Begins interaction with the chord manager
+	 *
+	 *	Sets the baseline palette and blending mode
+	 */
 	static void begin();
+
+	/**	Plays the chord */
 	static void play();
+
+	/**	Stops playing the chord */
 	static void release();
+
+	/**	Updates the leds
+	 *
+	 *	This function must be called with each pass of the loop
+	 *	to update the leds for the background effect.
+	 */
 	static void update(CRGB leds[]);
 private:
 	static bool _state;
